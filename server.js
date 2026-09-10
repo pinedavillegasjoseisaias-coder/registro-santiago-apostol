@@ -31,6 +31,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Confiar en el proxy de Render para cookies seguras
+app.set('trust proxy', 1);
+
 // Configuración segura de sesiones de Express
 app.use(
   session({
