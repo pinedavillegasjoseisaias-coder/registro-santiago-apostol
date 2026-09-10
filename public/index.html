@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - El Distintivo y Sección Santiago Apóstol Tequixquiac</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Encabezado con imagen hero -->
+    <header class="hero">
+        <div class="hero-overlay"></div>
+        <img src="img/iglesia.webp" alt="Santiago Apóstol Tequixquiac" class="hero-image">
+        <div class="hero-content">
+            <h1>El Distintivo y Sección<br>Santiago Apóstol Tequixquiac</h1>
+            <p class="hero-subtitle">Formulario de Registro</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <form id="registroForm" novalidate>
+            <!-- Nombre completo -->
+            <div class="form-group">
+                <label for="nombre">Nombre completo <span class="required">*</span></label>
+                <input type="text" id="nombre" name="nombre_completo" placeholder="Ej. Juan Pérez López" required minlength="3" autocomplete="name">
+                <span class="error-msg" id="error-nombre"></span>
+            </div>
+
+            <!-- Fecha de nacimiento -->
+            <div class="form-group">
+                <label for="fechaNacimiento">Fecha de nacimiento <span class="required">*</span></label>
+                <input type="date" id="fechaNacimiento" name="fecha_nacimiento" required>
+                <span class="error-msg" id="error-fechaNacimiento"></span>
+            </div>
+
+            <!-- Fecha de ingreso -->
+            <div class="form-group">
+                <label for="fechaIngreso">Fecha de ingreso <span class="required">*</span></label>
+                <input type="date" id="fechaIngreso" name="fecha_ingreso" required>
+                <span class="hint">No puede ser una fecha futura</span>
+                <span class="error-msg" id="error-fechaIngreso"></span>
+            </div>
+
+            <!-- Celular -->
+            <div class="form-group">
+                <label for="celular">Celular <span class="required">*</span></label>
+                <input type="tel" id="celular" name="celular" placeholder="10 dígitos" required pattern="[0-9]{10}" maxlength="10" inputmode="numeric">
+                <span class="error-msg" id="error-celular"></span>
+            </div>
+
+            <!-- Teléfono de emergencia -->
+            <div class="form-group">
+                <label for="telEmergencia">Teléfono de emergencia <span class="required">*</span></label>
+                <input type="tel" id="telEmergencia" name="telefono_emergencia" placeholder="10 dígitos" required pattern="[0-9]{10}" maxlength="10" inputmode="numeric">
+                <span class="error-msg" id="error-telEmergencia"></span>
+            </div>
+
+            <button type="submit" class="btn-submit" id="btnSubmit">
+                <span class="btn-text">Enviar Registro</span>
+                <span class="btn-loading" style="display:none;">Enviando...</span>
+            </button>
+        </form>
+
+        <!-- Mensaje de éxito (oculto por defecto) -->
+        <div id="successMessage" class="success-card" style="display:none;">
+            <div class="success-icon">✓</div>
+            <h2>¡Registro guardado con éxito!</h2>
+            <p>Tu información ha sido registrada correctamente.</p>
+            <button onclick="resetForm()" class="btn-new">Realizar otro registro</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 El Distintivo y Sección Santiago Apóstol Tequixquiac</p>
+    </footer>
+
+    <script src="js/form.js"></script>
+</body>
+</html>
