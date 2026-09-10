@@ -87,6 +87,26 @@ body {
 }
 
 /* ==========================================================================
+   Logo de la Organización
+   ========================================================================== */
+.logo-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    border: 1px solid var(--border);
+}
+
+.logo-img {
+    max-width: 100%;
+    height: auto;
+    max-height: 100px;
+    object-fit: contain;
+}
+
+/* ==========================================================================
    Contenedor y Formulario
    ========================================================================== */
 .container {
