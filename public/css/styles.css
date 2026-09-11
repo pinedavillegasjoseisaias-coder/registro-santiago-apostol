@@ -113,6 +113,29 @@ body {
     max-width: 520px;
     margin: 0 auto;
     padding: 1.5rem 1rem;
+    position: relative;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85%;
+    height: 60%;
+    background-image: url('../img/logo-anm.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.06;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.container > * {
+    position: relative;
+    z-index: 1;
 }
 
 .form-group {
