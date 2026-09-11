@@ -62,8 +62,8 @@ const PORT = process.env.PORT || 3000;
  */
 async function startServer() {
   try {
-    // 1. Inicializar la base de datos SQLite y sus tablas
-    initDB();
+    // 1. Inicializar la base de datos PostgreSQL y sus tablas
+    await initDB();
 
     // 2. Hashear la contraseña de administrador y almacenar en app.locals
     const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';

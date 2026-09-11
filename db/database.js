@@ -1,12 +1,10 @@
 /**
  * Módulo de Base de Datos y Cifrado
- * Gestiona la conexión SQLite y operaciones criptográficas con AES-256-GCM.
+ * Gestiona la conexión PostgreSQL y operaciones criptográficas con AES-256-GCM.
  */
 
 const crypto = require('crypto');
-const path = require('path');
-const fs = require('fs');
-const Database = require('better-sqlite3');
+const { Pool } = require('pg');
 
 // Obtener o derivar la clave de cifrado de 32 bytes a partir de ENCRYPTION_KEY
 function getDerivedKey() {
@@ -14,52 +12,43 @@ function getDerivedKey() {
   return crypto.scryptSync(secretKey, 'salt', 32);
 }
 
-// Instancia única de la base de datos
-let dbInstance = null;
+// Pool de conexiones PostgreSQL
+let pool = null;
 
 /**
- * Inicializa la base de datos SQLite en ./db/registros.db
- * y crea la tabla registros si no existe.
- * @returns {Database.Database} Instancia de la base de datos SQLite.
+ * Obtiene el pool de conexiones, creándolo si no existe.
+ * @returns {Pool}
  */
-function initDB() {
-  const dbDir = path.resolve(__dirname);
-  if (!fs.existsSync(dbDir)) {
-    fs.mkdirSync(dbDir, { recursive: true });
+function getPool() {
+  if (!pool) {
+    pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false }
+    });
   }
+  return pool;
+}
 
-  const dbPath = path.join(dbDir, 'registros.db');
-  dbInstance = new Database(dbPath);
+/**
+ * Inicializa la base de datos PostgreSQL y crea la tabla si no existe.
+ */
+async function initDB() {
+  const p = getPool();
 
-  // Activar modo WAL para mayor concurrencia y fiabilidad
-  dbInstance.pragma('journal_mode = WAL');
-
-  // Crear tabla de registros si no existe
-  dbInstance.exec(`
+  await p.query(`
     CREATE TABLE IF NOT EXISTS registros (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id SERIAL PRIMARY KEY,
       nombre_completo TEXT NOT NULL,
       fecha_nacimiento TEXT NOT NULL,
       fecha_ingreso TEXT NOT NULL,
       celular TEXT NOT NULL,
       telefono_emergencia TEXT NOT NULL,
-      created_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime'))
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
     )
   `);
 
-  return dbInstance;
-}
-
-/**
- * Retorna la instancia de la base de datos SQLite.
- * La inicializa si aún no ha sido creada.
- * @returns {Database.Database}
- */
-function getDB() {
-  if (!dbInstance) {
-    return initDB();
-  }
-  return dbInstance;
+  console.log('Base de datos PostgreSQL inicializada correctamente.');
+  return p;
 }
 
 /**
@@ -73,7 +62,7 @@ function encrypt(text) {
   }
 
   const key = getDerivedKey();
-  const iv = crypto.randomBytes(12); // 12 bytes recomendados para AES-GCM
+  const iv = crypto.randomBytes(12);
   const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
 
   let encrypted = cipher.update(String(text), 'utf8', 'hex');
@@ -96,7 +85,7 @@ function decrypt(encryptedText) {
 
   const parts = encryptedText.split(':');
   if (parts.length !== 3) {
-    throw new Error('Formato de texto cifrado inválido. Se esperaba iv:authTag:encrypted');
+    throw new Error('Formato de texto cifrado inválido.');
   }
 
   const [ivHex, authTagHex, encryptedHex] = parts;
@@ -117,5 +106,5 @@ module.exports = {
   initDB,
   encrypt,
   decrypt,
-  getDB
+  getPool
 };
