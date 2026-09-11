@@ -87,26 +87,36 @@ body {
 }
 
 /* ==========================================================================
-   Logo en el Hero
-   ========================================================================== */
-.hero-logo {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    height: 65px;
-    z-index: 3;
-    opacity: 0.35;
-    object-fit: contain;
-    filter: brightness(10);
-}
-
-/* ==========================================================================
    Contenedor y Formulario
    ========================================================================== */
 .container {
     max-width: 520px;
     margin: 0 auto;
     padding: 1.5rem 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.container::after {
+    content: '';
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280px;
+    height: 280px;
+    background-image: url('../img/logo-anm.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.07;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.container > * {
+    position: relative;
+    z-index: 1;
 }
 
 .form-group {
