@@ -122,13 +122,13 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 85%;
-    height: 60%;
+    width: 90%;
+    height: 70%;
     background-image: url('../img/logo-anm.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    opacity: 0.06;
+    opacity: 0.12;
     pointer-events: none;
     z-index: 0;
 }
